@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 import io
-from ai import TicTacToeAI
+from ai import TicTacToeAI, State
 
 
 class TestGame(unittest.TestCase):
@@ -89,25 +89,26 @@ class TestGame(unittest.TestCase):
         self.assertFalse(move)
 
     def test_is_terminal_state_true(self):
-        is_terminal = self.tictactoe.is_terminal_state(self.mock_draw)
+        mock_state = State([["x", "o", "x"], ["o", "x", "o"], ["o", "x", "o"]], 'o', (1, 2))
+        is_terminal = State.is_terminal_state(mock_state)
         self.assertTrue(is_terminal)
 
     def test_is_terminal_state_false(self):
-        is_terminal = self.tictactoe.is_terminal_state(self.mock_board)
+        mock_state = State([["x", "o", "x"], [" ", " ", "o"], ["o", "x", "o"]], 'o', (1, 2))
+        is_terminal = State.is_terminal_state(mock_state)
         self.assertFalse(is_terminal)
 
-    @patch.object(TicTacToeAI, "is_terminal_state", return_value=False)
-    @patch.object(TicTacToeAI, "evaluate", return_value=0)
-    @patch.object(
-        TicTacToeAI,
-        "children",
-        return_value=[
-            ((1, 2), ("o", [["o", "x", "o"], ["x", "x", "o"], ["x", "o", " "]]))
-        ],
-    )
-    def test_minimax(self, mock_children, mock_evaluate, mock_is_terminal_state):
-        node = ("o", [["o", "x", "o"], ["x", "x", "o"], ["x", "o", " "]])
-        result, _ = self.tictactoe.minimax(node, depth=3, max_player=True)
-        self.assertEqual(result, 0)
-        mock_evaluate.assert_called_with(node[-1])
-        mock_children.assert_called_with(node)
+
+    @patch('ai.TicTacToeAI.minimax')
+    @patch('ai.State.children')
+    def test_ai_make_move(self, mock_children, mock_minimax):
+
+        mock_children.return_value = [State(self.mock_board, 'o', (1, 1))]
+        mock_minimax.return_value = 42
+
+        result = self.tictactoe.ai_make_move(self.mock_board)
+
+        self.assertEqual(result, (1, 1))
+        mock_children.assert_called_once()
+        mock_minimax.assert_called_once_with(mock_children.return_value[0], depth=3, alpha=-10000, beta=10000, max_player=False)
+

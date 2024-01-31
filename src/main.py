@@ -7,11 +7,13 @@ def main():
     while True:
         game.display_board()
 
+
         if game.current_player == "x":
             row = int(input(f"Player {game.current_player}, enter the row (0-2): "))
             col = int(input(f"Player {game.current_player}, enter the column (0-2): "))
 
             if game.make_move(row, col):
+                game.last_move = row, col
                 game.switch_player()
             else:
                 print("invalid move, try again.")
@@ -21,6 +23,8 @@ def main():
             if game.make_move(ai_row, ai_col):
                 game.switch_player()
                 print("\n")
+            else:
+                print("invalid move, try again.")
 
         if game.check_winner(game.board, "x"):
             game.display_board()
