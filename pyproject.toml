@@ -13,6 +13,7 @@ python = "^3.10"
 pytest = "^7.4.4"
 pytest-cov = "^4.1.0"
 pylint = "^3.0.3"
+coverage = "^7.4.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -21,5 +22,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 pythonpath = "src"
 
+
 [tool.pylint]
-disable = ["C0114", "C0115", "C0116"]
+disable = ["C0114", "C0115", "C0116", "C0200", "W0246"]
