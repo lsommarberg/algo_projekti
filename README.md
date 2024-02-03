@@ -7,6 +7,12 @@
 
 [Linkki viikkoraporttiin 2](documents/viikkoraportti2.md)
 
+[Linkki viikkoraporttiin 3](documents/viikkoraportti3.md)
+
+[Pylint (src)](pylint_report.txt)
+
+
+
 Ohjelman käyttö:
 
 - Kloonaa repositorio
