@@ -23,6 +23,8 @@ class TicTacToe:
         if not self.is_valid_move(row, col):
             return False
         self.board[row][col] = self.current_player
+
+        self.last_move = row, col
         return True
 
     def check_winner(self, board, symbol):
@@ -57,7 +59,7 @@ class TicTacToe:
         items_as_strings = ["".join(inner_list) for inner_list in items]
 
         for string in items_as_strings:
-            if string == symbol * 3:
+            if symbol * 3 in string:
                 return True
         return False
 
@@ -92,7 +94,6 @@ class TicTacToe:
         - False, jos ruutu ei ole tyhjä
         """
 
-        # row, col for indeces
         if self.board[row][col] == " ":
             return True
         return False
