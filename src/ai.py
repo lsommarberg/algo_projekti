@@ -1,158 +1,140 @@
 import copy
 from tic_tac_toe import TicTacToe
 
-
-class State(TicTacToe):
-    def __init__(self, state, player, move):
-        """
-        Tallentaa pelilaudan tilan annetussa hetkessä luokkaobjektiksi
-
-        Parametrit:
-        - pelilauta (list): 2D lista laudan tilasta
-        - pelaaja (str): 'o' tai 'x', seuraavan siirron perusteella
-        - move (tuple(int, int)): viimeisin siirto
-        """
-        super().__init__()
-        self.state = state
-        self.player = player
-        self.move = move
-
-    def children(self):
-        """
-        Laskee seuraavat mahdolliset siirrot kyseisessä tilassa,
-        ja lisää ne listaan
-
-        Palauttaa:
-        - listan seuraavista mahdollisista siirroista State objekteina
-        """
-
-        current_board = self.state
-
-        child_nodes = []
-
-        for row in range(len(current_board)):
-            for col in range(len(current_board)):
-                if current_board[row][col] == " ":
-                    new_board = copy.deepcopy(current_board)
-
-                    new_board[row][col] = self.player
-                    next_player = "x" if self.player == "o" else "o"
-
-                    child_nodes.append(State(new_board, next_player, (row, col)))
-
-        return child_nodes
-
-    def is_terminal_state(self):
-        """
-        Tarkistaa, onko kyseisen objektin lauta voittotilassa tai tasapelissä
-
-        Palauttaa:
-        - True, jos voittaja löytyy, tai kyseessä on tasapeli
-        - False, jos peli vielä jatkuu
-        """
-        if self.check_draw(self.state):
-            return True
-
-        if self.check_winner(self.state, symbol="x") or self.check_winner(
-            self.state, symbol="o"
-        ):
-            return True
-
-        return False
+tictactoe = TicTacToe()
 
 
-class TicTacToeAI(TicTacToe):
-    def __init__(self):
-        super().__init__()
+def evaluate(board, last_move, moves):
+    """
+    Laskee siirron arvon, kun syvyys on 0.
 
-    def evaluate(self, node):
-        """
-        Laskee pisteet kyseisessä pelilaudan tilassa
+    Parametrit:
+    - board: pelilaudan tila
+    - last_move (tuple (int, int)): viimeisin siirto
 
-        Parametrit:
-        - node State(): sisältää State objektin
+    Palauttaa:
+    - parhaan siirron arvon (int)
+    """
+    if tictactoe.check_winner(board, "x", last_move):
+        return -100000, last_move
+    if tictactoe.check_winner(board, "o", last_move):
+        return 100000, last_move
+
+    score = 0
+    ai_symbol = 'o'
+    empty_symbol = ' '
+    
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j] == ai_symbol:
+                score += 1
+            elif board[i][j] == empty_symbol:
+                score += 0.1
+    
+    return score
 
 
-        Palauttaa:
-        - minimax arvon (int)
-        """
-        board_state = node.state
-        opponent_wins = self.check_winner(board_state, symbol="x")
-        ai_wins = self.check_winner(board_state, symbol="o")
-        if opponent_wins:
-            return -10
-        if ai_wins:
-            return 10
+def max_value(board, depth, alpha, beta, moves, last_move):
+    """
+    Maksimoiva pelaaja
 
-        return 0
+    Parametrit:
+    - board: pelilaudan tila
+    - depth (int): syvyys, jossa arvo lasketaan
+    - alpha (int): alpha beta karsinnan alpha arvo
+    - beta (int): alpha beta karsinnan beta arvo
+    - moves (list: tuple): seuraavien siirtojen lista
+    - last_move (tuple (int, int)): viimeisin siirto
 
-    def max_value(self, node, depth, alpha, beta):
-        """
-        Maksimoiva pelaaja
+    Palauttaa:
+    - maksimiarvon (int)
+    - parhaan siirron (tuple)
+    """
 
-        Parametrit:
-        - node State(): sisältää State objektin
-        - depth (int): syvyys, jossa arvo lasketaan
-        - alpha (int): alpha beta karsinnan alpha arvo
-        - beta (int): alpha beta karsinnan beta arvo
+    if tictactoe.check_winner(board, "x", last_move):
+        return -100000, last_move
 
-        Palauttaa:
-        - maksimiarvon (int)
-        """
+    if depth == 0:
+        return evaluate(board, last_move, moves), last_move
 
-        if node.is_terminal_state() or depth == 0:
-            return self.evaluate(node)
-        best_value = -10000
-        for child in node.children():
-            value = self.min_value(child, depth - 1, alpha, beta)
-            best_value = max(value, best_value)
-            alpha = max(alpha, best_value)
-            if best_value >= beta:
-                break
-        return best_value
+    best_value = -10000
+    best_move = None
 
-    def min_value(self, node, depth, alpha, beta):
-        """
-        Minimoiva pelaaja
+    updated_moves = moves.copy()
+    for move in reversed(updated_moves):
+        row, col = move
 
-        Parametrit:
-        - node State(): sisältää State objektin
-        - depth (int): syvyys, jossa arvo lasketaan
-        - alpha (int): alpha beta karsinnan alpha arvo
-        - beta (int): alpha beta karsinnan beta arvo
+        board[row][col] = "o"
+        updated_moves = [m for m in moves if m != move]
+        updated_moves = tictactoe.update_possible_moves(board, move, updated_moves)
 
-        Palauttaa:
-        - minimiarvon (int)
-        """
-        if node.is_terminal_state() or depth == 0:
-            return self.evaluate(node)
-        best_value = 10000
-        for child in node.children():
-            value = self.max_value(child, depth - 1, alpha, beta)
-            best_value = min(value, best_value)
-            beta = min(beta, best_value)
-            if best_value <= alpha:
-                break
-        return best_value
+        value, _ = min_value(
+            board, depth - 1, alpha, beta, updated_moves, last_move=(row, col)
+        )
 
-    def ai_make_move(self, board):
-        """
-        Laskee rekursiivisesti parhaan mahdollisen
-        siirron tulevien siirtojen perusteella.
+        board[row][col] = " "
 
-        Parametrit:
-        - board (list): pelilaudan tila
+        if value > best_value:
+            best_value = value
+            best_move = move
 
-        Palauttaa:
-        - best_move (int): paras siirto
-        """
-        state = State(board, "o", self.last_move)
-        best_move = state.move
-        best_value = -1000
-        for child in state.children():
-            value = self.max_value(child, depth=3, alpha=-10000, beta=10000)
-            if value > best_value:
-                best_value = value
-                best_move = child.move
 
-        return best_move
+
+        if best_value >= beta:
+
+            break
+        alpha = max(alpha, best_value)
+
+    return best_value, best_move
+
+
+def min_value(board, depth, alpha, beta, moves, last_move):
+    """
+    Minimoiva pelaaja
+
+    Parametrit:
+    - board: pelilaudan tila
+    - depth (int): syvyys, jossa arvo lasketaan
+    - alpha (int): alpha beta karsinnan alpha arvo
+    - beta (int): alpha beta karsinnan beta arvo
+    - moves (list: tuple): seuraavien siirtojen lista
+    - last_move (tuple (int, int)): viimeisin siirto
+
+    Palauttaa:
+    - minimiarvon (int)
+    - parhaan siirron (tuple)
+    """
+
+    if tictactoe.check_winner(board, "o", last_move):
+        return 100000, last_move
+
+    if depth == 0:
+        return evaluate(board, last_move, moves), last_move
+
+    best_value = 10000
+    best_move = None
+
+    updated_moves = moves.copy()
+    for move in reversed(updated_moves):
+        row, col = move
+
+        board[row][col] = "x"
+        updated_moves = [m for m in moves if m != move]
+
+        updated_moves = tictactoe.update_possible_moves(board, move, updated_moves)
+        value, _ = max_value(
+            board, depth - 1, alpha, beta, updated_moves, last_move=(row, col)
+        )
+
+        board[row][col] = " "
+
+        if value < best_value:
+            best_value = value
+            best_move = move
+
+        if best_value <= alpha:
+            break
+
+        beta = min(beta, best_value)
+
+    return best_value, best_move

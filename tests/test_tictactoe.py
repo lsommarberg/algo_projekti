@@ -7,17 +7,16 @@ from tic_tac_toe import TicTacToe
 class TestGame(unittest.TestCase):
     def setUp(self):
         self.tictactoe = TicTacToe()
-        self.mock_board = [["x", " ", " "], [" ", "o", " "], [" ", " ", " "]]
-        self.mock_draw = [["x", "o", "x"], ["o", "x", "o"], ["o", "x", "o"]]
-        self.mock_winner_x = [["x", "x", "x"], ["o", " ", " "], ["o", "x", "o"]]
-        self.mock_winner_o = [["x", " ", "o"], ["x", "o", "x"], ["o", "x", "o"]]
+        self.mock_board = [[" " for _ in range(20)] for _ in range(20)]
+        self.mock_board[0][0] = "x"
+        self.mock_small_board = [["x", " ", " "], [" ", "o", " "], [" ", " ", " "]]
 
     def test_initialization(self):
         self.assertEqual(self.tictactoe.current_player, "x")
 
     @patch("sys.stdout", new_callable=io.StringIO)
     def test_display_board(self, mock_stdout):
-        self.tictactoe.board = self.mock_board
+        self.tictactoe.board = self.mock_small_board
         self.tictactoe.display_board()
 
         printed_output = mock_stdout.getvalue()
@@ -33,57 +32,47 @@ class TestGame(unittest.TestCase):
 
     def test_not_valid_move(self):
         self.tictactoe.board = self.mock_board
-        row, col = 1, 1
+        row, col = 0, 0
         is_valid = self.tictactoe.is_valid_move(row, col)
         self.assertFalse(is_valid)
 
-    def test_switch_player(self):
-        self.tictactoe.current_player = "x"
-        self.tictactoe.switch_player()
-        self.assertEqual(self.tictactoe.current_player, "o")
-
-    def test_check_draw_true(self):
-        self.tictactoe.board = self.mock_draw
-        draw = self.tictactoe.check_draw(self.tictactoe.board)
-        self.assertTrue(draw)
-
-    def test_check_draw_false(self):
-        self.tictactoe.board = self.mock_winner_x
-        draw = self.tictactoe.check_draw(self.tictactoe.board)
-        self.assertFalse(draw)
-
     def test_check_winner_true_x(self):
-        winner = self.tictactoe.check_winner(self.mock_winner_x, "x")
+        mock_board = [[" " for _ in range(20)] for _ in range(20)]
+        for i in range(4, 9):
+            mock_board[-i][i] = "o"
+        for i in range(4, 9):
+            mock_board[i][3] = "x"
+
+        winner = self.tictactoe.check_winner(mock_board, "x", (5, 3))
         self.assertTrue(winner)
 
     def test_check_winner_false_x(self):
-        winner = self.tictactoe.check_winner(self.mock_draw, "x")
+        mock_board = [[" " for _ in range(20)] for _ in range(20)]
+        for i in range(4, 9):
+            mock_board[-i][i] = "o"
+
+        mock_board[5][3] = "x"
+
+        winner = self.tictactoe.check_winner(mock_board, "x", (5, 3))
         self.assertFalse(winner)
 
-    def test_check_winner_wrong_symbol(self):
-        winner = self.tictactoe.check_winner(self.mock_winner_x, "o")
-        self.assertFalse(winner)
-
-    def test_check_winner_o(self):
-        winner = self.tictactoe.check_winner(self.mock_winner_o, "o")
-        self.assertTrue(winner)
-
-    @patch("ai.TicTacToe.is_valid_move")
-    def test_make_valid_move(self, is_valid_move_mock):
-        self.tictactoe.board = self.mock_board
-        self.tictactoe.current_player = "x"
-        row, col = 1, 2
-        is_valid_move_mock.return_value = True
-        self.tictactoe.make_move(row, col)
-        expected_output = [["x", " ", " "], [" ", "o", "x"], [" ", " ", " "]]
-        move = self.tictactoe.board
-        self.assertEqual(expected_output, move)
-
-    @patch("ai.TicTacToe.is_valid_move")
-    def test_make_not_valid_move(self, is_valid_move_mock):
-        self.tictactoe.board = self.mock_board
-        self.tictactoe.current_player = "x"
-        row, col = 1, 1
-        is_valid_move_mock.return_value = False
-        move = self.tictactoe.make_move(row, col)
-        self.assertFalse(move)
+    def test_update_possible_moves(self):
+        mock_board = [[" " for _ in range(5)] for _ in range(5)]
+        mock_last_move = (0, 0)
+        mock_board[0][0] = "x"
+        updated_moves = self.tictactoe.update_possible_moves(
+            mock_board, mock_last_move, possible_moves=[]
+        )
+        expected_output = [
+            (0, 1),
+            (0, 2),
+            (1, 1),
+            (1, 2),
+            (1, 0),
+            (2, 2),
+            (2, 0),
+            (2, 1),
+        ]
+        for move in updated_moves:
+            self.subTest(move=move)
+            self.assertIn(move, expected_output)
