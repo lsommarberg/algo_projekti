@@ -10,8 +10,8 @@ def main():
     while True:
         game.display_board()
         if player == "x":
-            row = int(input(f"Player {game.current_player}, enter the row (0-2): "))
-            col = int(input(f"Player {game.current_player}, enter the column (0-2): "))
+            row = int(input(f"Player {game.current_player}, enter the row (0-9): "))
+            col = int(input(f"Player {game.current_player}, enter the column (0-9): "))
 
             if game.make_move(row, col, "x"):
                 counter += 1
