@@ -1,10 +1,11 @@
 from tic_tac_toe import TicTacToe
-from ai import max_value
+from ai import Minimax
 import copy
 
 
 def main():
     game = TicTacToe()
+    ai = Minimax()
     counter = 0
     player = "x"
     while True:
@@ -22,7 +23,7 @@ def main():
             board = copy.deepcopy(game.board)
             moves = game.possible_moves
             last_move = game.last_move
-            _, (ai_row, ai_col) = max_value(
+            _, (ai_row, ai_col) = ai.max_value(
                 board,
                 depth=5,
                 alpha=-10000,
