@@ -32,7 +32,7 @@ class Minimax(TicTacToe):
         
         return score
 
-    def max_value(self, board, depth, alpha, beta, moves, last_move, counter):
+    def max_value(self, board, depth, alpha, beta, moves, last_move, count):
         """
         Maksimoiva pelaaja
 
@@ -52,7 +52,7 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "x", last_move):
             return -100000, last_move
 
-        if counter == 100:
+        if count == 100:
             return 0, last_move
         
         if depth == 0:
@@ -66,16 +66,16 @@ class Minimax(TicTacToe):
             row, col = move
 
             board[row][col] = "o"
-            counter += 1
+            count += 1
             updated_moves = [m for m in moves if m != move]
             updated_moves = self.update_possible_moves(board, move, updated_moves)
 
             value, _ = self.min_value(
-                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), counter=counter
+                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), count=count
             )
 
             board[row][col] = " "
-            counter -= 1
+            count -= 1
             if value > best_value:
                 best_value = value
                 best_move = move
@@ -88,7 +88,7 @@ class Minimax(TicTacToe):
         return best_value, best_move
 
 
-    def min_value(self, board, depth, alpha, beta, moves, last_move, counter):
+    def min_value(self, board, depth, alpha, beta, moves, last_move, count):
         """
         Minimoiva pelaaja
 
@@ -108,7 +108,7 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "o", last_move):
             return 100000, last_move
 
-        if counter == 100:
+        if count == 100:
             return 0, last_move
         
         if depth == 0:
@@ -122,16 +122,16 @@ class Minimax(TicTacToe):
             row, col = move
 
             board[row][col] = "x"
-            counter += 1
+            count += 1
             updated_moves = [m for m in moves if m != move]
 
             updated_moves = self.update_possible_moves(board, move, updated_moves)
             value, _ = self.max_value(
-                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), counter=counter
+                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), count=count
             )
 
             board[row][col] = " "
-            counter -= 1
+            count -= 1
             if value < best_value:
                 best_value = value
                 best_move = move
