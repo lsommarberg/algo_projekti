@@ -7,7 +7,8 @@ class Minimax(TicTacToe):
     def __init__(self, size=10):
         super().__init__(size)
 
-    def evaluate(self, board):
+    
+    def evaluate(self, board, moves, last_move, symbol):
         """
         Laskee siirron arvon, kun syvyys on 0.
 
@@ -18,9 +19,8 @@ class Minimax(TicTacToe):
         Palauttaa:
         - parhaan siirron arvon (int)
         """
-        
         score = 0
-        ai_symbol = 'o'
+        ai_symbol = symbol
         empty_symbol = ' '
         
         for i in range(len(board)):
@@ -32,8 +32,7 @@ class Minimax(TicTacToe):
         
         return score
 
-
-    def max_value(self, board, depth, alpha, beta, moves, last_move):
+    def max_value(self, board, depth, alpha, beta, moves, last_move, counter):
         """
         Maksimoiva pelaaja
 
@@ -53,8 +52,11 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "x", last_move):
             return -100000, last_move
 
+        if counter == 100:
+            return 0, last_move
+        
         if depth == 0:
-            return self.evaluate(board), last_move
+            return self.evaluate(board, moves, last_move, 'o'), last_move
 
         best_value = -10000
         best_move = None
@@ -64,15 +66,16 @@ class Minimax(TicTacToe):
             row, col = move
 
             board[row][col] = "o"
+            counter += 1
             updated_moves = [m for m in moves if m != move]
             updated_moves = self.update_possible_moves(board, move, updated_moves)
 
             value, _ = self.min_value(
-                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col)
+                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), counter=counter
             )
 
             board[row][col] = " "
-
+            counter -= 1
             if value > best_value:
                 best_value = value
                 best_move = move
@@ -85,7 +88,7 @@ class Minimax(TicTacToe):
         return best_value, best_move
 
 
-    def min_value(self, board, depth, alpha, beta, moves, last_move):
+    def min_value(self, board, depth, alpha, beta, moves, last_move, counter):
         """
         Minimoiva pelaaja
 
@@ -105,8 +108,11 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "o", last_move):
             return 100000, last_move
 
+        if counter == 100:
+            return 0, last_move
+        
         if depth == 0:
-            return self.evaluate(board), last_move
+            return self.evaluate(board, moves, last_move, 'x'), last_move
 
         best_value = 10000
         best_move = None
@@ -116,15 +122,16 @@ class Minimax(TicTacToe):
             row, col = move
 
             board[row][col] = "x"
+            counter += 1
             updated_moves = [m for m in moves if m != move]
 
             updated_moves = self.update_possible_moves(board, move, updated_moves)
             value, _ = self.max_value(
-                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col)
+                board, depth - 1, alpha, beta, updated_moves, last_move=(row, col), counter=counter
             )
 
             board[row][col] = " "
-
+            counter -= 1
             if value < best_value:
                 best_value = value
                 best_move = move

@@ -23,6 +23,7 @@ def main():
             board = copy.deepcopy(game.board)
             moves = game.possible_moves
             last_move = game.last_move
+            count = counter
             _, (ai_row, ai_col) = ai.max_value(
                 board,
                 depth=5,
@@ -30,6 +31,7 @@ def main():
                 beta=10000,
                 moves=moves,
                 last_move=last_move,
+                count=count
             )
 
             if game.make_move(ai_row, ai_col, "o"):

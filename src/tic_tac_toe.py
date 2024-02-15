@@ -55,11 +55,17 @@ class TicTacToe:
                 elif cell not in possible_moves:
                     possible_moves.append(cell)
 
-        possible_moves = possible_moves + list(most_likely_moves)
         for move in possible_moves:
             row, col = move
             if board[row][col] != " ":
                 possible_moves.remove(move)
+
+        for move in most_likely_moves:
+            row, col = move
+            if board[row][col] != " ":
+                most_likely_moves.remove(move)
+
+        possible_moves = possible_moves + list(most_likely_moves)
 
         return possible_moves
 
@@ -153,14 +159,14 @@ class TicTacToe:
     def check_column(self, board, symbol, move):
         _, c = move
         column = [row[c] for row in board]
-        column_string = "".join(column) + "".join(column)
+        column_string = "".join(column)
         if symbol * 5 in column_string:
             return True
 
     def check_row(self, board, symbol, move):
         r, _ = move
         row = board[r]
-        row_string = "".join(row) + "".join(row)
+        row_string = "".join(row)
         if symbol * 5 in row_string:
             return True
 
