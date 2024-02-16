@@ -4,33 +4,12 @@ class TicTacToe:
         self.current_player = "x"
         self.last_move = None
         self.possible_moves = []
-        self.neighbors = self.generate_neighbors()
+        self.turn = 0
 
     def display_board(self):
         for row in self.board:
             print(row)
 
-    def generate_neighbors(self):
-        """
-        Listaa jokaiselle ruudulle korkeintaan 
-        kahden ruudun päässä olevat ruudut laudalla.
-
-        Palauttaa:
-        - neighbors (dict): dictionary, jonka avaimet ovat ruutuja,
-        ja arvot lähimpiä ruutuja.
-        """
-        neighbors = {}
-        for i in range(len(self.board)):
-            for j in range(len(self.board[0])):
-                neighbors[(i, j)] = {
-                    (x, y)
-                    for x in range(i - 2, i + 3)
-                    for y in range(j - 2, j + 3)
-                    if 0 <= x < len(self.board)
-                    and 0 <= y < len(self.board[0])
-                    and (x, y) != (i, j)
-                }
-        return neighbors
 
     def update_possible_moves(self, board, last_move, possible_moves):
         """
@@ -44,31 +23,21 @@ class TicTacToe:
         Palauttaa:
         - päivitetyn siirtolistan
         """
-        most_likely_moves = set()
-        neighbors = self.neighbors
-        for cell in neighbors[last_move]:
-            row, col = cell
-            if board[row][col] == " ":
-                if cell in possible_moves:
-                    possible_moves.remove(cell)
-                    most_likely_moves.add(cell)
-                elif cell not in possible_moves:
-                    possible_moves.append(cell)
-
-        for move in possible_moves:
-            row, col = move
-            if board[row][col] != " ":
-                possible_moves.remove(move)
-
-        for move in most_likely_moves:
-            row, col = move
-            if board[row][col] != " ":
-                most_likely_moves.remove(move)
-
-        possible_moves = possible_moves + list(most_likely_moves)
-
+        row, col = last_move
+        for i in range(max(0, row - 2), min(len(board), row + 3)):
+            for j in range(max(0, col - 2), min(len(board[0]), col + 3)):
+                if (i, j) != last_move:
+                    if board[i][j] == " ":
+                        if (i, j) not in possible_moves:
+                            possible_moves.append((i, j))
+                        elif (i, j) in possible_moves:
+                            possible_moves.remove((i, j))
+                            possible_moves.append((i, j))
+                if (i, j) == last_move:
+                    if (i, j) in possible_moves:
+                        possible_moves.remove((i, j))
         return possible_moves
-
+    
 
     def make_move(self, row, col, symbol):
         """
@@ -91,7 +60,7 @@ class TicTacToe:
         self.possible_moves = self.update_possible_moves(
             self.board, (row, col), possible_moves=self.possible_moves
         )
-
+        self.turn += 1
         return True
 
     def check_winner(self, board, symbol, last_move):

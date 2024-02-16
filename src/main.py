@@ -6,7 +6,6 @@ import copy
 def main():
     game = TicTacToe()
     ai = Minimax()
-    counter = 0
     player = "x"
     while True:
         game.display_board()
@@ -15,7 +14,6 @@ def main():
             col = int(input(f"Player {game.current_player}, enter the column (0-9): "))
 
             if game.make_move(row, col, "x"):
-                counter += 1
                 player = "o"
             else:
                 print("invalid move, try again.")
@@ -23,7 +21,7 @@ def main():
             board = copy.deepcopy(game.board)
             moves = game.possible_moves
             last_move = game.last_move
-            count = counter
+            count = game.turn
             _, (ai_row, ai_col) = ai.max_value(
                 board,
                 depth=5,
@@ -35,7 +33,6 @@ def main():
             )
 
             if game.make_move(ai_row, ai_col, "o"):
-                counter += 1
                 player = "x"
                 print("\n")
             else:
@@ -51,7 +48,7 @@ def main():
             print("o wins")
             break
 
-        if counter == 100:
+        if game.turn == 100:
             print("draw")
             break
 

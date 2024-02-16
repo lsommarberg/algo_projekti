@@ -52,10 +52,9 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "x", last_move):
             return -100000, last_move
 
-        if count == 100:
-            return 0, last_move
-        
-        if depth == 0:
+        if depth == 0 or count == 100:
+            if count == 100:
+                return 0, last_move
             return self.evaluate(board, moves, last_move, 'o'), last_move
 
         best_value = -10000
@@ -108,10 +107,11 @@ class Minimax(TicTacToe):
         if self.check_winner(board, "o", last_move):
             return 100000, last_move
 
-        if count == 100:
-            return 0, last_move
         
-        if depth == 0:
+        
+        if depth == 0 or count == 100:
+            if count == 100:
+                return 0, last_move
             return self.evaluate(board, moves, last_move, 'x'), last_move
 
         best_value = 10000
