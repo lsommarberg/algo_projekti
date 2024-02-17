@@ -42,8 +42,7 @@ class TicTacToe:
                         possible_moves.remove((i, j))
 
         return (
-            updated_moves
-            + list(set(possible_moves) - set(most_likely_moves) - set(updated_moves))
+            list(set(possible_moves) - set(updated_moves))
             + most_likely_moves
         )
 
