@@ -61,7 +61,18 @@ class TestGame(unittest.TestCase):
         mock_last_move = (0, 0)
         mock_board[0][0] = "x"
         updated_moves = self.tictactoe.update_possible_moves(
-            mock_board, mock_last_move, possible_moves=[]
+            mock_board,
+            mock_last_move,
+            possible_moves=[
+                (0, 1),
+                (0, 2),
+                (1, 1),
+                (1, 2),
+                (1, 0),
+                (2, 2),
+                (2, 0),
+                (2, 1),
+            ],
         )
         expected_output = [
             (0, 1),
@@ -73,6 +84,56 @@ class TestGame(unittest.TestCase):
             (2, 0),
             (2, 1),
         ]
+        for move in updated_moves:
+            self.subTest(move=move)
+            self.assertIn(move, expected_output)
+
+    def test_update_possible_moves_2(self):
+        mock_board = [
+            ["o", " ", " ", " ", " ", " ", " ", " ", "x", "o"],
+            ["o", "x", "o", "x", "o", "o", "o", "x", "o", "o"],
+            ["x", "o", "x", "x", "x", "o", "o", "o", " ", " "],
+            ["o", "x", "x", "o", "x", "o", "x", "x", "x", "x"],
+            ["o", "x", "o", "x", "o", "x", "x", "x", "x", " "],
+            ["x", "o", "o", "x", "x", "o", "o", "x", "o", " "],
+            ["x", "x", "o", "o", "o", "o", "x", "x", "x", "x"],
+            ["x", "o", "x", "x", "x", "o", "o", "o", "x", "o"],
+            ["o", "o", "x", "o", "x", "o", "x", "o", "o", "o"],
+            ["x", "x", "x", "o", "o", "x", "o", "o", "o", "x"],
+        ]
+
+        mock_last_move = (0, 0)
+        updated_moves = self.tictactoe.update_possible_moves(
+            mock_board,
+            mock_last_move,
+            possible_moves=[
+                (0, 1),
+                (0, 2),
+                (0, 3),
+                (0, 4),
+                (0, 5),
+                (0, 6),
+                (0, 7),
+                (2, 8),
+                (2, 9),
+                (4, 9),
+                (5, 9),
+            ],
+        )
+        expected_output = [
+            (0, 1),
+            (0, 2),
+            (0, 3),
+            (0, 4),
+            (0, 5),
+            (0, 6),
+            (0, 7),
+            (2, 8),
+            (2, 9),
+            (4, 9),
+            (5, 9),
+        ]
+
         for move in updated_moves:
             self.subTest(move=move)
             self.assertIn(move, expected_output)

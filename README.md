@@ -9,7 +9,16 @@
 
 [Linkki viikkoraporttiin 3](documents/viikkoraportti3.md)
 
+[Linkki viikkoraporttiin 4](documents/viikkoraportti4.md)
+
+[Linkki viikkoraporttiin 5](documents/viikkoraportti5.md)
+
+
+
 [Pylint (src)](pylint_report.txt)
+
+[Coverage (src)](coverage_report.txt)
+
 
 
 
@@ -19,4 +28,6 @@ Ohjelman käyttö:
 - Asenna riippuvuudet komennolla 'poetry install'
 - Käynnistä virtuaaliympäristö komennolla 'poetry shell'
 - Käynnistä ohjelma ajamalla python3 src/main.py
-- Voit pelata tekoälyä vastaan, ohjelma kysyy vuorollasi ensin rivin 0-2, ja sitten sarakkeen 0-2.
+- Voit pelata tekoälyä vastaan, ohjelma kysyy vuorollasi ensin rivin 0-9, ja sitten sarakkeen 0-9.
+
+- Voit ajaa testit komennolla pytest

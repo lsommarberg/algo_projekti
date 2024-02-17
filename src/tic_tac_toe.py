@@ -1,5 +1,5 @@
 class TicTacToe:
-    def __init__(self, size = 10):
+    def __init__(self, size=10):
         self.board = [[" " for _ in range(size)] for _ in range(size)]
         self.current_player = "x"
         self.last_move = None
@@ -9,7 +9,6 @@ class TicTacToe:
     def display_board(self):
         for row in self.board:
             print(row)
-
 
     def update_possible_moves(self, board, last_move, possible_moves):
         """
@@ -23,21 +22,30 @@ class TicTacToe:
         Palauttaa:
         - päivitetyn siirtolistan
         """
+        possible_moves = set(possible_moves)
+        updated_moves = []
+        most_likely_moves = []
         row, col = last_move
         for i in range(max(0, row - 2), min(len(board), row + 3)):
             for j in range(max(0, col - 2), min(len(board[0]), col + 3)):
                 if (i, j) != last_move:
                     if board[i][j] == " ":
                         if (i, j) not in possible_moves:
-                            possible_moves.append((i, j))
-                        elif (i, j) in possible_moves:
+                            updated_moves.append((i, j))
+                        else:
+                            most_likely_moves.append((i, j))
+                    else:
+                        if (i, j) in possible_moves:
                             possible_moves.remove((i, j))
-                            possible_moves.append((i, j))
-                if (i, j) == last_move:
+                else:
                     if (i, j) in possible_moves:
                         possible_moves.remove((i, j))
-        return possible_moves
-    
+
+        return (
+            updated_moves
+            + list(set(possible_moves) - set(most_likely_moves) - set(updated_moves))
+            + most_likely_moves
+        )
 
     def make_move(self, row, col, symbol):
         """
@@ -56,7 +64,8 @@ class TicTacToe:
 
         self.last_move = row, col
         self.board[row][col] = symbol
-
+        if self.last_move in self.possible_moves:
+            self.possible_moves.remove(self.last_move)
         self.possible_moves = self.update_possible_moves(
             self.board, (row, col), possible_moves=self.possible_moves
         )
