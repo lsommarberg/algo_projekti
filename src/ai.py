@@ -12,7 +12,7 @@ class Minimax(TicTacToe):
     def evaluate_row(self, board, last_move, symbol):
 
         r, c = last_move
-        count = 0
+        score = 0
         whole_row = board[r]
         if c > 3:
             whole_row = whole_row[c-4:c+4]
@@ -20,14 +20,14 @@ class Minimax(TicTacToe):
             whole_row = whole_row[:c+4]
         row_string = "".join(whole_row)
         if ' '+symbol*3+' ' in row_string:
-            count+=1
-        return count if symbol == 'o' else -count
+            score+=1
+        return score if symbol == 'o' else -score
     
             
     def evaluate_col(self, board, last_move, symbol):
 
         r, c = last_move
-        count = 0
+        score = 0
         whole_column = [row[c] for row in board]
         if r > 3:
             whole_column = whole_column[r-4:r+4]
@@ -36,24 +36,24 @@ class Minimax(TicTacToe):
 
         col_string = "".join(whole_column)
         if ' '+symbol*3+' ' in col_string:
-            count+=1
-        return count if symbol == 'o' else -count
+            score+=1
+        return score if symbol == 'o' else -score
 
     
     def evaluate_diag(self, board, last_move, symbol):
-        count = 0
+        score = 0
         diagonal = self.get_diagonal(board, last_move)
         counter_diagonal = self.get_counter_diagonal(board, last_move)
         if len(diagonal) >= 5:
             diagonal_string = "".join(diagonal)
             if ' '+symbol*3+' ' in diagonal_string:
-                count+=1
+                score+=1
         if len(counter_diagonal) >= 5:
             c_diagonal_string = "".join(counter_diagonal)
             if ' '+symbol*3+' ' in c_diagonal_string:
-                count+=1
+                score+=1
 
-        return count if symbol == 'o' else -count
+        return score if symbol == 'o' else -score
     
 
     def evaluate(self, board, moves, last_move, symbol):
@@ -94,7 +94,8 @@ class Minimax(TicTacToe):
         if depth == 0 or count == 100:
             if count == 100:
                 return 0, last_move
-            return self.evaluate(board, moves, last_move, "o"), last_move
+            player = 'o' if max_player else 'x'
+            return self.evaluate(board, moves, last_move, player), last_move
 
         if max_player:
             best_value = -10000
