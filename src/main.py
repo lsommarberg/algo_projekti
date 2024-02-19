@@ -22,14 +22,15 @@ def main():
             moves = game.possible_moves
             last_move = game.last_move
             count = game.turn
-            _, (ai_row, ai_col) = ai.max_value(
+            _, (ai_row, ai_col) = ai.minimax(
                 board,
                 depth=5,
                 alpha=-10000,
                 beta=10000,
                 moves=moves,
                 last_move=last_move,
-                count=count
+                count=count,
+                max_player=True
             )
 
             if game.make_move(ai_row, ai_col, "o"):

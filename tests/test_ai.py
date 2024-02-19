@@ -18,14 +18,15 @@ class TestGame(unittest.TestCase):
         last_move = (2, 2)
         expected_move = (1, 2)
 
-        _, actual_move = mock_tictactoe.max_value(
+        _, actual_move = mock_tictactoe.minimax(
             board,
             depth=3,
             alpha=-1000000,
             beta=1000000,
             moves=moves,
             last_move=last_move,
-            count=5
+            count=5,
+            max_player=True
         )
 
         self.assertEqual(actual_move, expected_move)
@@ -41,14 +42,15 @@ class TestGame(unittest.TestCase):
         moves = [(2, 1), (1, 2), (2, 0), (0, 1)]
         last_move = (1, 1)
         expected_move = (0, 1)
-        _, actual_move = mock_tictactoe.max_value(
+        _, actual_move = mock_tictactoe.minimax(
             board,
             depth=3,
             alpha=-1000000,
             beta=1000000,
             moves=moves,
             last_move=last_move,
-            count=5
+            count=5,
+            max_player=True
         )
 
         self.assertEqual(actual_move, expected_move)

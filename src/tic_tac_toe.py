@@ -37,14 +37,9 @@ class TicTacToe:
                     else:
                         if (i, j) in possible_moves:
                             possible_moves.remove((i, j))
-                else:
-                    if (i, j) in possible_moves:
-                        possible_moves.remove((i, j))
 
-        return (
-            list(set(possible_moves) - set(updated_moves))
-            + most_likely_moves
-        )
+        return updated_moves + list(set(possible_moves) - set(most_likely_moves) - set(updated_moves)) + most_likely_moves
+        
 
     def make_move(self, row, col, symbol):
         """
