@@ -13,6 +13,9 @@
 
 [Linkki viikkoraporttiin 5](documents/viikkoraportti5.md)
 
+[Linkki viikkoraporttiin 6](documents/viikkoraportti6.md)
+
+
 
 
 [Pylint (src)](pylint_report.txt)
@@ -28,6 +31,6 @@ Ohjelman käyttö:
 - Asenna riippuvuudet komennolla 'poetry install'
 - Käynnistä virtuaaliympäristö komennolla 'poetry shell'
 - Käynnistä ohjelma ajamalla python3 src/main.py
-- Voit pelata tekoälyä vastaan, ohjelma kysyy vuorollasi ensin rivin 0-9, ja sitten sarakkeen 0-9.
+- Voit pelata tekoälyä vastaan, ohjelma kysyy vuorollasi ensin rivin 1-20, ja sitten sarakkeen 1-20.
 
-- Voit ajaa testit komennolla pytest
+- Voit ajaa testit virtuaaliympäristössä projektin juurikansiossa komennolla pytest

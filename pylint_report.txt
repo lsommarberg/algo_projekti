@@ -1,4 +1,11 @@
+************* Module board
+src/board.py:33:8: C0415: Import outside toplevel (ai.Minimax) (import-outside-toplevel)
+src/board.py:64:8: W0201: Attribute 'last_move' defined outside __init__ (attribute-defined-outside-init)
+************* Module ai
+src/ai.py:266:4: R0913: Too many arguments (9/5) (too-many-arguments)
+src/ai.py:266:4: R0914: Too many local variables (17/15) (too-many-locals)
+src/ai.py:296:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 
---------------------------------------------------------------------
-Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)
+------------------------------------------------------------------
+Your code has been rated at 9.84/10 (previous run: 9.84/10, +0.00)
 

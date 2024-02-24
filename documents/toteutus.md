@@ -1,5 +1,6 @@
 # Toteutusdokumentti
 
-- Ohjelman yleisrakenne: main-tiedosto sisältää peliloopin, tictactoe-tiedostossa on pelin perustoiminnallisuuksista huolehtiva TicTacToe-luokka, ja ai-tiedostossa tekoälyn käyttämät funktiot.
-- Puutteita: hidas, 20x20 ruudukko ei vieläkään käytössä, en ole varma toimintojen oikeellisuuksista.
+- Ohjelman yleisrakenne: main-tiedosto sisältää peliloopin, tictactoe-tiedostossa on peliloopin toiminnallisuuksista huolehtiva TicTacToeGame-luokka, board-tiedostossa on pelilaudan perustoiminnallisuuksista huolehtiva Board-luokka ja ai-tiedostossa tekoälyn käyttämät funktiot.
+- Heuristista funktiota voisi vielä parantaa, testausta on laajennettava.
+
 - Olen käyttänyt ChatGPT:tä ideoimiseen ja debuggaukseen, ja kirjoittamaan syötteitä, joilla testata toiminnallisuuksia.
