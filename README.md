@@ -3,6 +3,10 @@
 
 [Linkki määrittelydokumenttiin](documents/maarittely.md)
 
+[Linkki toteutusdokumenttiin](documents/toteutus.md)
+
+[Linkki testausdokumenttiin](documents/testaus.md)
+
 [Linkki viikkoraporttiin 1](documents/viikkoraportti1.md)
 
 [Linkki viikkoraporttiin 2](documents/viikkoraportti2.md)
@@ -32,5 +36,6 @@ Ohjelman käyttö:
 - Käynnistä virtuaaliympäristö komennolla 'poetry shell'
 - Käynnistä ohjelma ajamalla python3 src/main.py
 - Voit pelata tekoälyä vastaan, ohjelma kysyy vuorollasi ensin rivin 1-20, ja sitten sarakkeen 1-20.
+  - Ohjelma hyväksyy vain pelilautaan kuuluvat vapaat ruudut, muunlaisilla syötteillä se antaa virheilmoituksen.
 
 - Voit ajaa testit virtuaaliympäristössä projektin juurikansiossa komennolla pytest

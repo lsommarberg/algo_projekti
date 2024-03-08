@@ -30,6 +30,17 @@ class Board:
             print("-" * (self.size * (cell_width + 1) + 2))
 
     def is_game_over(self, last_move):
+        """
+        Tarkistaa, onko toinen pelaajista voittanut,
+        tai onko peli tasapelissä.
+
+        Parametrit:
+        - viimeisin siirto: (tuple)
+
+        Palauttaa:
+        - True, jos peli on tasapelissä/voitossa
+        - False, jos peli vielä jatkuu
+        """
         from ai import Minimax
 
         minimax = Minimax()
@@ -39,8 +50,9 @@ class Board:
         if minimax.check_winner(self.board, "o", last_move):
             print("o wins!")
             return True
-        if self.turn == 200:
+        if self.turn == self.size*self.size:
             print("draw")
+            return True
         return False
 
     def get_current_player(self):
@@ -48,7 +60,7 @@ class Board:
 
     def make_move(self, row, col, symbol):
         """
-        Tekee siirron rivin ja sarakkeen perusteella
+        Tekee siirron rivin ja sarakkeen perusteella, ja kasvattaa vuorojen määrää.
 
         Parametrit:
         - row (int): rivi
@@ -61,7 +73,6 @@ class Board:
         if not self.is_valid_move(row, col):
             return False
 
-        self.last_move = row, col
         self.board[row][col] = symbol
         self.turn += 1
         return True

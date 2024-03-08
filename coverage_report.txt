@@ -1,8 +1,8 @@
 Name                 Stmts   Miss  Cover
 ----------------------------------------
-src/ai.py              210     44    79%
-src/board.py            49     20    59%
-src/main.py              6      6     0%
-src/tic_tac_toe.py      40     33    18%
+src/ai.py              141      0   100%
+src/board.py            49      4    92%
+src/heuristic.py        95      0   100%
+src/tic_tac_toe.py      39      5    87%
 ----------------------------------------
-TOTAL                  305    103    66%
+TOTAL                  324      9    97%

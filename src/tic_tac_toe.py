@@ -23,6 +23,11 @@ class TicTacToeGame:
                 break
 
     def human_move(self):
+        """
+        Ottaa ihmispelaajan antaman siirron rivin ja sarakkeen.
+
+        Tarkistaa siirron laillisuuden ja tekee siirron tai antaa virheilmoituksen.
+        """
         valid_move = False
         while not valid_move:
             try:
@@ -42,10 +47,13 @@ class TicTacToeGame:
                 print("Invalid input. Please enter numbers.")
 
     def ai_move(self):
+        """
+        Hakee tekoälyn siirron.
+
+        Päivittää pelilaudan siirron jälkeen.
+        """
         row, col = self.minimax.get_best_move(self.board.board, self.board.turn)
         valid_move = self.board.make_move(row, col, "o")
         if valid_move:
             self.minimax.update_board_state((row, col), self.board.board)
             self.board.current_player = "x"
-        else:
-            print("invalid move, try again.")
