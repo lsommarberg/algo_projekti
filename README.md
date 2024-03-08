@@ -22,9 +22,9 @@
 
 
 
-[Pylint (src)](pylint_report.txt)
+[Pylint (src)](documents/pylint_report.txt)
 
-[Coverage (src)](coverage_report.txt)
+[Coverage (src)](documents/coverage_report.txt)
 
 
 
